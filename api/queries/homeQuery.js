@@ -1,0 +1,7 @@
+const getAllHome = "SELECT * FROM home";
+const getHomeByName = 'SELECT * FROM home WHERE "Name" = $1';
+const postNewHome =
+  'INSERT INTO home ("Name", "Number people", "Max people", "Launch", "Refrigerator", "Aekon", "Square", "Price") VALUES ($1,$2, $3, $4, $5, $6, $7, $8)';
+
+const deleteHome = 'DELETE FROM home WHERE "Name" = $1';
+module.exports = { getAllHome, getHomeByName, postNewHome, deleteHome };
