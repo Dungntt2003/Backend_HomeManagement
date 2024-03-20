@@ -3,6 +3,7 @@ const {
   getAllHome,
   getHomeByName,
   postNewHome,
+  updateHome,
   deleteHome,
 } = require("../queries/homeQuery");
 
@@ -69,6 +70,50 @@ const postHome = (req, res, next) => {
   });
 };
 
+const updateHomeByName = (req, res, next) => {
+  const name = req.params.name;
+  const {
+    numberPeople,
+    maxPeople,
+    launch,
+    refrigerator,
+    aekon,
+    square,
+    price,
+  } = req.body;
+  pool.query(getHomeByName, [name], (error, result) => {
+    if (result.rows.length == 0) {
+      res.status(404).json({
+        message: "Home not found",
+      });
+    } else if (numberPeople > maxPeople) {
+      res.status(409).json({
+        message: "Number of people cannot be more than max people",
+      });
+    } else {
+      pool.query(
+        updateHome,
+        [
+          numberPeople,
+          maxPeople,
+          launch,
+          refrigerator,
+          aekon,
+          square,
+          price,
+          name,
+        ],
+        (error, result) => {
+          if (error) throw error;
+          res.status(200).json({
+            message: "Home updated successfully",
+          });
+        }
+      );
+    }
+  });
+};
+
 const deleteHomeByName = (req, res, next) => {
   const name = req.params.name;
   pool.query(getHomeByName, [name], (error, result) => {
@@ -86,4 +131,10 @@ const deleteHomeByName = (req, res, next) => {
     }
   });
 };
-module.exports = { getHome, getHomeByname, postHome, deleteHomeByName };
+module.exports = {
+  getHome,
+  getHomeByname,
+  postHome,
+  updateHomeByName,
+  deleteHomeByName,
+};
