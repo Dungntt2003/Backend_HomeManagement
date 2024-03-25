@@ -9,17 +9,18 @@ const port = 8000;
 const pool = require("./db");
 
 const HomeRoute = require("./api/routes/home");
+const UserRoute = require("./api/routes/user");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    console.log(file);
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     console.log(file);
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({ storage: storage });
 
 app.use("/images", express.static(__dirname + "/images"));
 app.use(express.json());
@@ -41,23 +42,24 @@ app.use((req, res, next) => {
 });
 
 app.use("/homes", HomeRoute);
-app.post("/upload", upload.single("image"), (req, res, next) => {
-  const id = req.body.id;
-  const file = req.file.filename;
-  const sql = 'INSERT INTO Persons ("personid", "image") VALUES ($1, $2)';
-  pool.query(sql, [id, file], (error, result) => {
-    if (error) return res.json({ message: error.message });
-    return res.json({ message: "Successfully created" });
-  });
-});
+app.use("/users", UserRoute);
+// app.post("/upload", upload.single("image"), (req, res, next) => {
+//   const id = req.body.id;
+//   const file = req.file.filename;
+//   const sql = 'INSERT INTO Persons ("personid", "image") VALUES ($1, $2)';
+//   pool.query(sql, [id, file], (error, result) => {
+//     if (error) return res.json({ message: error.message });
+//     return res.json({ message: "Successfully created" });
+//   });
+// });
 
-app.get("/upload", (req, res, next) => {
-  const sql = "SELECT * FROM Persons";
-  pool.query(sql, (error, result) => {
-    if (error) return res.json({ message: error.message });
-    return res.json(result.rows);
-  });
-});
+// app.get("/upload", (req, res, next) => {
+//   const sql = "SELECT * FROM Persons";
+//   pool.query(sql, (error, result) => {
+//     if (error) return res.json({ message: error.message });
+//     return res.json(result.rows);
+//   });
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
