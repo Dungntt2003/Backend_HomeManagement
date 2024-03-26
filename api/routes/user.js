@@ -5,11 +5,19 @@ const {
   getInfoAdmin,
   getRenters,
   updateVip,
+  updateUserByEmail,
+  updateAccount,
+  deleteUserById,
+  createNewUser,
 } = require("../controllers/userController");
 
 router.get("/", getUsers);
 router.get("/admin", getInfoAdmin);
 router.get("/renter", getRenters);
-router.put("/:id", updateVip);
+router.post("/", createNewUser);
+router.put("/:id", updateAccount);
+router.put("/:id/changeRole", updateVip);
+router.put("/:id/updateAccount", updateUserByEmail);
+router.delete("/:id", deleteUserById);
 
 module.exports = router;

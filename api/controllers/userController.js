@@ -3,7 +3,12 @@ const {
   getAllUsers,
   getAdmin,
   getAllRenters,
+  getUser,
+  createUser,
+  updateUserEP,
   updateToRenter,
+  updateUser,
+  deleteUser,
 } = require("../queries/userQuery");
 
 const getUsers = (req, res, next) => {
@@ -39,17 +44,116 @@ const getRenters = (req, res, next) => {
     } else res.status(200).json(result.rows);
   });
 };
+
+const createNewUser = (req, res, next) => {
+  const { Email, Password, Name, Dob, Gender, isHost, isRenter } = req.body;
+  pool.query(
+    createUser,
+    [Email, Password, Name, Dob, Gender, isHost, isRenter],
+    (error, result) => {
+      if (error) {
+        res.status(500).json({
+          error: error.message,
+        });
+      } else
+        res.status(200).json({
+          message: "Create user successfully completed",
+        });
+    }
+  );
+};
+
+const updateUserByEmail = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getUser, [id], (err, result) => {
+    if (result.rows.length == 0) {
+      res.status(409).json({
+        error: "No users found",
+      });
+    } else {
+      const { Email, Password } = req.body;
+      pool.query(updateUserEP, [Email, Password, id], (error, result) => {
+        if (error) {
+          res.status(500).json({
+            error: error.message,
+          });
+        } else
+          res.status(200).json({
+            message: "Update email & password successfully completed",
+          });
+      });
+    }
+  });
+};
+
 const updateVip = (req, res, next) => {
   const id = req.params.id;
-  pool.query(updateToRenter, [id], (error, result) => {
-    if (error) {
-      res.status(500).json({
-        error: error.message,
+  pool.query(getUser, [id], (err, result) => {
+    if (result.rows.length == 0) {
+      res.status(409).json({
+        error: "No users found",
       });
-    } else
-      res.status(200).json({
-        message: "Update role successfully completed",
+    } else {
+      pool.query(updateToRenter, [id], (error, result) => {
+        if (error) {
+          res.status(500).json({
+            error: error.message,
+          });
+        } else
+          res.status(200).json({
+            message: "Update role successfully completed",
+          });
       });
+    }
+  });
+};
+
+const updateAccount = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getUser, [id], (err, result) => {
+    if (result.rows.length == 0) {
+      res.status(409).json({
+        error: "No users found",
+      });
+    } else {
+      const { Name, Dob, Gender, University } = req.body;
+      pool.query(
+        updateUser,
+        [Name, Dob, Gender, University, id],
+        (error, result) => {
+          if (error) {
+            res.status(500).json({
+              error: error.message,
+            });
+          } else
+            res.status(200).json({
+              message: "Update account successfully completed",
+            });
+        }
+      );
+    }
+  });
+};
+
+const deleteUserById = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getUser, [id], (err, result) => {
+    if (result.rows.length == 0) {
+      res.status(409).json({
+        error: "No users found",
+      });
+    } else {
+      pool.query(deleteUser, [id], (error, result) => {
+        if (error) {
+          res.status(500).json({
+            error: error.message,
+          });
+        } else
+          res.status(200).json({
+            message: "Delete user successfully completed",
+          });
+      });
+    }
   });
 };
 
@@ -57,5 +161,9 @@ module.exports = {
   getUsers,
   getInfoAdmin,
   getRenters,
+  createNewUser,
+  updateUserByEmail,
   updateVip,
+  updateAccount,
+  deleteUserById,
 };
