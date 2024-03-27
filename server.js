@@ -10,6 +10,7 @@ const pool = require("./db");
 
 const HomeRoute = require("./api/routes/home");
 const UserRoute = require("./api/routes/user");
+const TestRoute = require("./api/routes/test");
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 
 app.use("/homes", HomeRoute);
 app.use("/users", UserRoute);
+app.use("/test", TestRoute);
 // app.post("/upload", upload.single("image"), (req, res, next) => {
 //   const id = req.body.id;
 //   const file = req.file.filename;
