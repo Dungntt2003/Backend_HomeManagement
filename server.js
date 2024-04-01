@@ -3,14 +3,15 @@ const morgan = require("morgan");
 const cors = require("cors");
 // test upload image with multer
 const multer = require("multer");
-const path = require("path");
+// const path = require("path");
 const app = express();
 const port = 8000;
-const pool = require("./db");
+// const pool = require("./db");
 
 const HomeRoute = require("./api/routes/home");
 const UserRoute = require("./api/routes/user");
-const TestRoute = require("./api/routes/test");
+const LoginRoute = require("./api/routes/login");
+// const TestRoute = require("./api/routes/test");
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -44,7 +45,8 @@ app.use((req, res, next) => {
 
 app.use("/homes", HomeRoute);
 app.use("/users", UserRoute);
-app.use("/test", TestRoute);
+app.use("/", LoginRoute);
+// app.use("/test", TestRoute);
 // app.post("/upload", upload.single("image"), (req, res, next) => {
 //   const id = req.body.id;
 //   const file = req.file.filename;

@@ -8,13 +8,11 @@ const {
   updateUserByEmail,
   updateAccount,
   deleteUserById,
-  createNewUser,
 } = require("../controllers/userController");
 
 router.get("/", getUsers);
 router.get("/admin", getInfoAdmin);
 router.get("/renter", getRenters);
-router.post("/", createNewUser);
 router.put("/:id", updateAccount);
 router.put("/:id/changeRole", updateVip);
 router.put("/:id/updateAccount", updateUserByEmail);

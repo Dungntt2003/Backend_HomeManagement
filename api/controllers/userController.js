@@ -4,7 +4,6 @@ const {
   getAdmin,
   getAllRenters,
   getUser,
-  createUser,
   updateUserEP,
   updateToRenter,
   updateUser,
@@ -43,24 +42,6 @@ const getRenters = (req, res, next) => {
       });
     } else res.status(200).json(result.rows);
   });
-};
-
-const createNewUser = (req, res, next) => {
-  const { Email, Password, Name, Dob, Gender, isHost, isRenter } = req.body;
-  pool.query(
-    createUser,
-    [Email, Password, Name, Dob, Gender, isHost, isRenter],
-    (error, result) => {
-      if (error) {
-        res.status(500).json({
-          error: error.message,
-        });
-      } else
-        res.status(200).json({
-          message: "Create user successfully completed",
-        });
-    }
-  );
 };
 
 const updateUserByEmail = (req, res, next) => {
@@ -161,7 +142,6 @@ module.exports = {
   getUsers,
   getInfoAdmin,
   getRenters,
-  createNewUser,
   updateUserByEmail,
   updateVip,
   updateAccount,
