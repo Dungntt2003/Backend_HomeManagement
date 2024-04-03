@@ -4,8 +4,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const createNewUser = (req, res, next) => {
-  const { Email, Password, Name, Dob, Gender, University, isHost, isRenter } =
-    req.body;
+  const { Email, Password, Name, Dob, Gender, University } = req.body;
   bcrypt.hash(Password, saltRounds, function (err, hash) {
     if (err) {
       console.error(err);
@@ -13,7 +12,7 @@ const createNewUser = (req, res, next) => {
     }
     pool.query(
       createUser,
-      [Email, hash, Name, Dob, Gender, University, isHost, isRenter],
+      [Email, hash, Name, Dob, Gender, University],
       (error, result) => {
         if (error) {
           res.status(500).json({
