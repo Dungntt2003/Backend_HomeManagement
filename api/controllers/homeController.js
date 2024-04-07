@@ -18,6 +18,12 @@ const getHomeByname = (req, res, next) => {
   const name = req.params.name;
   pool.query(getHomeByName, [name], (error, result) => {
     if (error) throw error;
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        message: "Home not found",
+      });
+      return;
+    }
     res.status(200).json(result.rows);
   });
 };
@@ -32,6 +38,8 @@ const postHome = (req, res, next) => {
     aekon,
     square,
     price,
+    toilet,
+    bathroom,
   } = req.body;
   pool.query(getHomeByName, [Name], (error, result) => {
     if (result.rows.length > 0) {
@@ -50,6 +58,8 @@ const postHome = (req, res, next) => {
           aekon,
           square,
           price,
+          toilet,
+          bathroom,
         ],
         (error, result) => {
           if (numberPeople > maxPeople) {
@@ -80,6 +90,8 @@ const updateHomeByName = (req, res, next) => {
     aekon,
     square,
     price,
+    toilet,
+    bathroom,
   } = req.body;
   pool.query(getHomeByName, [name], (error, result) => {
     if (result.rows.length == 0) {
@@ -101,6 +113,8 @@ const updateHomeByName = (req, res, next) => {
           aekon,
           square,
           price,
+          toilet,
+          bathroom,
           name,
         ],
         (error, result) => {
