@@ -11,6 +11,7 @@ const port = 8000;
 const HomeRoute = require("./api/routes/home");
 const UserRoute = require("./api/routes/user");
 const LoginRoute = require("./api/routes/login");
+const bookSchedule = require("./api/routes/bookSchedule");
 // const TestRoute = require("./api/routes/test");
 
 // const storage = multer.diskStorage({
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 
 app.use("/homes", HomeRoute);
 app.use("/users", UserRoute);
+app.use("/bookSchedule", bookSchedule);
 app.use("/", LoginRoute);
 // app.use("/test", TestRoute);
 // app.post("/upload", upload.single("image"), (req, res, next) => {
