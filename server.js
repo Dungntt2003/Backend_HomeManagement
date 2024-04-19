@@ -6,7 +6,7 @@ const multer = require("multer");
 // const path = require("path");
 const app = express();
 const port = 8000;
-// const pool = require("./db");
+const pool = require("./db");
 
 const HomeRoute = require("./api/routes/home");
 const UserRoute = require("./api/routes/user");
@@ -14,16 +14,16 @@ const LoginRoute = require("./api/routes/login");
 const bookSchedule = require("./api/routes/bookSchedule");
 // const TestRoute = require("./api/routes/test");
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "images");
-//   },
-//   filename: (req, file, cb) => {
-//     console.log(file);
-//     cb(null, file.originalname);
-//   },
-// });
-// const upload = multer({ storage: storage });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 
 app.use("/images", express.static(__dirname + "/images"));
 app.use(express.json());
@@ -47,24 +47,51 @@ app.use((req, res, next) => {
 app.use("/homes", HomeRoute);
 app.use("/users", UserRoute);
 app.use("/bookSchedule", bookSchedule);
-app.use("/", LoginRoute);
 // app.use("/test", TestRoute);
-// app.post("/upload", upload.single("image"), (req, res, next) => {
+app.use("/", LoginRoute);
+app.post("/upload", upload.array("images", 5), (req, res, next) => {
+  const id = req.body.id;
+  const files = req.files.map((file) => file.filename);
+  const sql = "INSERT INTO Persons (personid, image) VALUES ($1, $2)";
+  pool.query(sql, [id, files], (error, result) => {
+    if (error) return res.json({ message: error.message });
+    return res.json({ message: "Successfully created" });
+  });
+});
+
+app.get("/upload", (req, res, next) => {
+  const sql = "SELECT * FROM Persons WHERE personid = 11";
+  pool.query(sql, (error, result) => {
+    if (error) return res.json({ message: error.message });
+    return res.json(result.rows);
+  });
+});
+
+// app.post("/api/images", upload.array("images", 5), async (req, res) => {
 //   const id = req.body.id;
-//   const file = req.file.filename;
-//   const sql = 'INSERT INTO Persons ("personid", "image") VALUES ($1, $2)';
-//   pool.query(sql, [id, file], (error, result) => {
-//     if (error) return res.json({ message: error.message });
-//     return res.json({ message: "Successfully created" });
-//   });
+//   try {
+//     const images = await Promise.all(
+//       req.files.map(async (file) => {
+//         const result = await pool.query(
+//           "INSERT INTO roomImages (room_id,data, name) VALUES ($1, $2, $3) RETURNING *",
+//           [id, file.buffer, file.originalname]
+//         );
+//         return result;
+//       })
+//     );
+//     res.status(200).json(images);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
 // });
 
-// app.get("/upload", (req, res, next) => {
-//   const sql = "SELECT * FROM Persons";
-//   pool.query(sql, (error, result) => {
-//     if (error) return res.json({ message: error.message });
-//     return res.json(result.rows);
-//   });
+// app.get("/api/images", async (req, res) => {
+//   try {
+//     const images = await pool.query("SELECT * FROM roomImages");
+//     res.status(200).json(images);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
 // });
 
 app.listen(port, () => {
