@@ -6,8 +6,11 @@ const getAllSchedules = "SELECT * FROM bookCalendar";
 const getScheduleResult =
   "SELECT result FROM bookCalendar WHERE user_id = $1,name = $2, date = $3";
 
+const getScheduleByUserId = "SELECT * FROM bookCalendar WHERE user_id = $1";
+
 module.exports = {
   createASchedule,
   getAllSchedules,
   getScheduleResult,
+  getScheduleByUserId,
 };

@@ -2,6 +2,7 @@ const {
   createASchedule,
   getAllSchedules,
   getScheduleResult,
+  getScheduleByUserId,
 } = require("../queries/bookScheduleQuery");
 const pool = require("../../db");
 const postSchedule = (req, res, next) => {
@@ -24,4 +25,15 @@ const postSchedule = (req, res, next) => {
   );
 };
 
-module.exports = { postSchedule };
+const getSchedulesByUserId = (req, res, next) => {
+  const user_id = req.params.user_id;
+  pool.query(getScheduleByUserId, [user_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        message: err.message,
+      });
+    }
+    return res.status(200).json(result.rows);
+  });
+};
+module.exports = { postSchedule, getSchedulesByUserId };
