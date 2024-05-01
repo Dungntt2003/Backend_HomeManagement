@@ -4,6 +4,7 @@ const {
   getUsers,
   getInfoAdmin,
   getRenters,
+  getUserById,
   updateVip,
   updateUserByEmail,
   updateAccount,
@@ -13,6 +14,7 @@ const {
 router.get("/", getUsers);
 router.get("/admin", getInfoAdmin);
 router.get("/renter", getRenters);
+router.get("/:id", getUserById);
 router.put("/:id", updateAccount);
 router.put("/:id/changeRole", updateVip);
 router.put("/:id/updateAccount", updateUserByEmail);

@@ -24,6 +24,21 @@ const getUsers = (req, res, next) => {
   });
 };
 
+const getUserById = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getUser, [id], (err, result) => {
+    if (result.rows.length == 0) {
+      res.status(409).json({
+        error: "No users found",
+      });
+    } else if (err) {
+      res.status(500).json({
+        error: err.message,
+      });
+    } else res.status(200).json(result.rows);
+  });
+};
+
 const getInfoAdmin = (req, res, next) => {
   pool.query(getAdmin, (err, result) => {
     if (err) {
@@ -141,6 +156,7 @@ const deleteUserById = (req, res, next) => {
 module.exports = {
   getUsers,
   getInfoAdmin,
+  getUserById,
   getRenters,
   updateUserByEmail,
   updateVip,
