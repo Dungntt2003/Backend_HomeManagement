@@ -39,6 +39,8 @@ const checkUserByEmail = (req, res, next) => {
     if (result.rows.length > 0) {
       const hash = result.rows[0].password;
       const userId = result.rows[0].id;
+      const isHost = result.rows[0].ishost;
+      const isRenter = result.rows[0].isrenter;
       bcrypt.compare(Password, hash, function (err, result) {
         if (err) {
           res.status(500).json({
@@ -50,6 +52,8 @@ const checkUserByEmail = (req, res, next) => {
           res.status(200).json({
             message: "Login successfully",
             id: userId,
+            isHost: isHost,
+            isRenter: isRenter,
           });
           return;
         }
