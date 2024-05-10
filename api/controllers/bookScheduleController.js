@@ -5,6 +5,7 @@ const {
   getScheduleByUserId,
   queueSchedules,
   updateScheduleResult,
+  updateScheduleAccept,
 } = require("../queries/bookScheduleQuery");
 const pool = require("../../db");
 const { json } = require("express");
@@ -73,8 +74,22 @@ const getQueueSchedules = (req, res, next) => {
 
 const ScheduleResult = (req, res, next) => {
   const id = req.params.id;
-  const { result } = req.body;
+  const result = req.body.result;
   pool.query(updateScheduleResult, [result, id], (err, result) => {
+    if (err)
+      return res.status(500).json({
+        message: err.message,
+      });
+    return res.status(200).json({
+      message: "Update successful",
+    });
+  });
+};
+
+const ScheduleAccept = (req, res, next) => {
+  const id = req.params.id;
+  const accept = req.body.accept;
+  pool.query(updateScheduleAccept, [accept, id], (err, result) => {
     if (err)
       return res.status(500).json({
         message: err.message,
@@ -90,4 +105,5 @@ module.exports = {
   getAllSchedule,
   getQueueSchedules,
   ScheduleResult,
+  ScheduleAccept,
 };
