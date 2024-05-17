@@ -5,6 +5,7 @@ const {
   postNewHome,
   updateHome,
   deleteHome,
+  deleteImages,
 } = require("../queries/homeQuery");
 
 const getHome = (req, res, next) => {
@@ -136,10 +137,14 @@ const deleteHomeByName = (req, res, next) => {
         message: "Home not found",
       });
     } else {
-      pool.query(deleteHome, [name], (error, result) => {
-        if (error) throw error;
-        res.status(200).json({
-          message: "Home deleted successfully",
+      pool.query(deleteImages, [name], (err, result) => {
+        if (err) throw err;
+
+        pool.query(deleteHome, [name], (error, result) => {
+          if (error) throw error;
+          res.status(200).json({
+            message: "Home deleted successfully",
+          });
         });
       });
     }
