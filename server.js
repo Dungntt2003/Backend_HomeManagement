@@ -54,6 +54,7 @@ app.post("/upload", upload.array("images", 5), (req, res, next) => {
   const checkRoom = "SELECT * from roomImages where room_id = $1";
   const insert = "INSERT INTO roomImages (room_id, images) VALUES ($1,$2)";
   const sql = "UPDATE roomImages SET images = $1 where room_id = $2";
+  const createNewRoom = 'INSERT INTO home ("Name") VALUES ($1)';
   pool.query(checkRoom, [id], (err, result) => {
     if (err)
       return result.status(409).json({
@@ -65,9 +66,12 @@ app.post("/upload", upload.array("images", 5), (req, res, next) => {
         return res.json({ message: "Successfully created" });
       });
     } else {
-      pool.query(insert, [id, files], (err, result) => {
+      pool.query(createNewRoom, [id], (err, result) => {
         if (err) return res.status(409).json({ message: err.message });
-        return res.status(200).json({ message: "Successfully created" });
+        pool.query(insert, [id, files], (err, result) => {
+          if (err) return res.status(409).json({ message: err.message });
+          return res.status(200).json({ message: "Successfully created" });
+        });
       });
     }
   });
