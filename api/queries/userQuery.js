@@ -1,12 +1,11 @@
-const getAllUsers = "SELECT * FROM Users WHERE isHost = false";
+const getAllUsers =
+  "SELECT * FROM Users WHERE isHost = false and isRenter = false";
 const getAdmin = "SELECT * FROM Users WHERE isHost = true";
 const getAllRenters = "SELECT * FROM Users WHERE isRenter = true";
 const getUser = "SELECT * FROM Users WHERE id = $1";
-const updateToRenter = `UPDATE users SET isRenter = CASE 
-                            WHEN isRenter = false THEN true 
-                            WHEN isRenter = true THEN false 
-                            END 
-                        WHERE isHost = false AND id = $1`;
+const updateToRenter = `UPDATE users
+                        SET isRenter = NOT isRenter
+                        WHERE id = $1;`;
 const updateUserEP = `UPDATE Users
                     SET Email = $1, Password = $2 
                     WHERE id = $3`;
