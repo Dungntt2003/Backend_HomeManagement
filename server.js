@@ -12,6 +12,7 @@ const LoginRoute = require("./api/routes/login");
 const bookSchedule = require("./api/routes/bookSchedule");
 const homeImages = require("./api/routes/homeImages");
 const AnnounceRoute = require("./api/routes/announce");
+const inHomeRoute = require("./api/routes/inHome");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -48,6 +49,7 @@ app.use("/users", UserRoute);
 app.use("/bookSchedule", bookSchedule);
 app.use("/upload", homeImages);
 app.use("/announcement", AnnounceRoute);
+app.use("/inRoom", inHomeRoute);
 app.use("/", LoginRoute);
 
 app.post("/upload", upload.array("images", 5), (req, res, next) => {
