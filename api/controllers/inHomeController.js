@@ -6,6 +6,8 @@ const {
   // getAll,
   getRenterByRoom,
   getBill,
+  stopRenter,
+  updateBill,
 } = require("../queries/inHomeQuery");
 
 const { getAllHome } = require("../queries/homeQuery");
@@ -67,4 +69,38 @@ const getAllInfos = async (req, res, next) => {
   }
 };
 
-module.exports = { addRenter, updateRenter, getAllInfos };
+const stopRenterByRoom = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(stopRenter, [id], (err, result) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    } else
+      res.status(200).json({
+        message: "Updated successfully",
+      });
+  });
+};
+
+const updateBillByRoom = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(updateBill, [id], (err, result) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    } else
+      res.status(200).json({
+        message: "Updated successfully",
+      });
+  });
+};
+
+module.exports = {
+  addRenter,
+  updateRenter,
+  getAllInfos,
+  stopRenterByRoom,
+  updateBillByRoom,
+};
