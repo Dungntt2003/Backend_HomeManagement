@@ -8,6 +8,7 @@ const {
   getBill,
   stopRenter,
   updateBill,
+  createBill,
 } = require("../queries/inHomeQuery");
 
 const { getAllHome } = require("../queries/homeQuery");
@@ -97,10 +98,24 @@ const updateBillByRoom = (req, res, next) => {
   });
 };
 
+const createNewBill = (req, res, next) => {
+  pool.query(createBill, (err, result) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    } else
+      res.status(200).json({
+        message: "Create successfully",
+      });
+  });
+};
+
 module.exports = {
   addRenter,
   updateRenter,
   getAllInfos,
   stopRenterByRoom,
   updateBillByRoom,
+  createNewBill,
 };

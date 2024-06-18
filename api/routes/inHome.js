@@ -7,6 +7,7 @@ const {
   getAllInfos,
   stopRenterByRoom,
   updateBillByRoom,
+  createNewBill,
 } = require("../controllers/inHomeController");
 
 router.post("/", addRenter);
@@ -15,5 +16,6 @@ router.get("/", getAllInfos);
 router.put("/:id", updateRenter);
 router.put("/stopRent/:id", stopRenterByRoom);
 router.put("/bill/:id", updateBillByRoom);
+router.get("/bill", createNewBill);
 
 module.exports = router;

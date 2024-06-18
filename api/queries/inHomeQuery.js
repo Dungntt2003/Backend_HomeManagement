@@ -9,6 +9,7 @@ const getRenterByRoom =
 const getBill = "SELECT * FROM bill WHERE room_id = $1";
 const updateBill =
   "UPDATE bill SET post_date = CURRENT_DATE, ispay = true WHERE id = $1";
+const createBill = "select insert_bills()";
 module.exports = {
   insertNewRenter,
   updateRenterDate,
@@ -17,4 +18,5 @@ module.exports = {
   getBill,
   stopRenter,
   updateBill,
+  createBill,
 };
