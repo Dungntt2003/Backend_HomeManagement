@@ -8,6 +8,8 @@ const {
   stopRenterByRoom,
   updateBillByRoom,
   createNewBill,
+  getRenterInfoDetail,
+  getBillInfoDetail,
 } = require("../controllers/inHomeController");
 
 router.post("/", addRenter);
@@ -17,5 +19,7 @@ router.put("/:id", updateRenter);
 router.put("/stopRent/:id", stopRenterByRoom);
 router.put("/bill/:id", updateBillByRoom);
 router.get("/bill", createNewBill);
+router.get("/bill/:id", getBillInfoDetail);
+router.get("/renter/:id", getRenterInfoDetail);
 
 module.exports = router;

@@ -9,6 +9,8 @@ const {
   stopRenter,
   updateBill,
   createBill,
+  getRenterDetail,
+  getBillDetail,
 } = require("../queries/inHomeQuery");
 
 const { getAllHome } = require("../queries/homeQuery");
@@ -111,6 +113,30 @@ const createNewBill = (req, res, next) => {
   });
 };
 
+const getRenterInfoDetail = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getRenterDetail, [id], (err, result) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    } else {
+      res.status(200).json(result.rows);
+    }
+  });
+};
+
+const getBillInfoDetail = (req, res, next) => {
+  const id = req.params.id;
+  pool.query(getBillDetail, [id], (err, result) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+    } else res.status(200).json(result.rows);
+  });
+};
+
 module.exports = {
   addRenter,
   updateRenter,
@@ -118,4 +144,6 @@ module.exports = {
   stopRenterByRoom,
   updateBillByRoom,
   createNewBill,
+  getRenterInfoDetail,
+  getBillInfoDetail,
 };
