@@ -7,14 +7,18 @@ const postNewHome = `INSERT INTO home
   VALUES ($1,$2, $3, $4, $5, $6, $7, $8, $9, $10)`;
 
 const updateHome = `UPDATE home 
-  SET "Number people" = $1, "Max people"= $2, "Launch"= $3, "Refrigerator" = $4, "Aekon" = $5, "Square" = $6, "Price" = $7,"toilet" = $8, "bathroom" = $9 
-  WHERE "Name" = $10`;
+  SET "Max people"= $1, "Launch"= $2, "Refrigerator" = $3, "Aekon" = $4, "Square" = $5, "Price" = $6,"toilet" = $7, "bathroom" = $8 
+  WHERE "Name" = $9`;
+const updateHomeV2 = `UPDATE home 
+  SET "Max people"= $1, "Launch"= $2, "Refrigerator" = $3, "Aekon" = $4, "Square" = $5, "Price" = $6,"toilet" = $7, "bathroom" = $8 , "Number people" = 0
+  WHERE "Name" = $9`;
 const deleteHome = 'DELETE FROM home WHERE "Name" = $1';
 const deleteImages = "DELETE FROM roomImages WHERE room_id = $1";
 module.exports = {
   getAllHome,
   getHomeByName,
   postNewHome,
+  updateHomeV2,
   updateHome,
   deleteHome,
   deleteImages,

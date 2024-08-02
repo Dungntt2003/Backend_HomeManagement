@@ -6,6 +6,7 @@ const {
   updateHome,
   deleteHome,
   deleteImages,
+  updateHomeV2,
 } = require("../queries/homeQuery");
 
 const getHome = (req, res, next) => {
@@ -45,9 +46,8 @@ const postHome = (req, res, next) => {
   pool.query(getHomeByName, [Name], (error, result) => {
     if (result.rows.length > 0) {
       pool.query(
-        updateHome,
+        updateHomeV2,
         [
-          numberPeople,
           maxPeople,
           launch,
           refrigerator,
@@ -59,10 +59,14 @@ const postHome = (req, res, next) => {
           Name,
         ],
         (error, result) => {
-          if (error) throw error;
-          res.status(200).json({
-            message: "Home updated successfully",
-          });
+          if (error)
+            res.status(500).json({
+              message: error.message,
+            });
+          else
+            res.status(200).json({
+              message: "Home updated successfully",
+            });
         }
       );
     } else {
@@ -102,7 +106,6 @@ const postHome = (req, res, next) => {
 const updateHomeByName = (req, res, next) => {
   const name = req.params.name;
   const {
-    numberPeople,
     maxPeople,
     launch,
     refrigerator,
@@ -117,15 +120,16 @@ const updateHomeByName = (req, res, next) => {
       res.status(404).json({
         message: "Home not found",
       });
-    } else if (numberPeople > maxPeople) {
-      res.status(409).json({
-        message: "Number of people cannot be more than max people",
-      });
-    } else {
+    }
+    // else if (numberPeople > maxPeople) {
+    //   res.status(409).json({
+    //     message: "Number of people cannot be more than max people",
+    //   });
+    // }
+    else {
       pool.query(
         updateHome,
         [
-          numberPeople,
           maxPeople,
           launch,
           refrigerator,
